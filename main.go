@@ -1,7 +1,7 @@
 package main
 
 import (
-	"context" // Use "golang.org/x/net/context" for Golang version <= 1.6
+	"context"
 	"flag"
 	"os"
 	"os/signal"
@@ -32,7 +32,6 @@ func main() {
 	})
 
 	select {
-
 	case err := <-sigChan:
 		glog.Info("sigChan")
 		glog.Info(err)
