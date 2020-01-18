@@ -8,12 +8,24 @@ import (
 	"syscall"
 
 	"github.com/golang/glog"
+	"github.com/kelseyhightower/envconfig"
 
 	"github.com/vienai8d/grpc-gateway-sample/internal/server"
 )
 
+type Env struct {
+	Port     int `default:"8888"`
+	GrpcPort int `split_word:"true" default:"9999"`
+}
+
 func main() {
 	defer glog.Flush()
+
+	e := Env{}
+	err := envconfig.Process("", &e)
+	if err != nil {
+		glog.Fatal(err)
+	}
 
 	flag.Parse()
 
@@ -24,11 +36,11 @@ func main() {
 	signal.Notify(sigChan, syscall.SIGTERM, syscall.SIGINT)
 
 	gErrChan := server.RunGrpc(ctx, &server.GrpcConfig{
-		Port: 9999,
+		Port: e.GrpcPort,
 	})
 	hErrChan := server.RunHTTP(ctx, &server.HTTPConfig{
-		Port:     8888,
-		GrpcPort: 9999,
+		Port:     e.Port,
+		GrpcPort: e.GrpcPort,
 	})
 
 	select {
