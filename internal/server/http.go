@@ -23,9 +23,7 @@ func RunHTTP(ctx context.Context, c *HTTPConfig) chan error {
 
 	go func() {
 		defer close(errChan)
-		mux := runtime.NewServeMux(
-			runtime.WithMarshalerOption("application/octet-stream", new(runtime.ProtoMarshaller)),
-		)
+		mux := runtime.NewServeMux()
 		opts := []grpc.DialOption{grpc.WithInsecure()}
 		httpEndpoint := fmt.Sprintf("%s:%d", c.Host, c.Port)
 		grpcEndpoint := fmt.Sprintf("%s:%d", c.Host, c.GrpcPort)
