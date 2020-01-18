@@ -15,19 +15,20 @@ import (
 
 type Env struct {
 	Port     int `default:"8888"`
-	GrpcPort int `split_word:"true" default:"9999"`
+	GrpcPort int `split_words:"true" default:"9999"`
 }
 
 func main() {
 	defer glog.Flush()
+
+	flag.Parse()
 
 	e := Env{}
 	err := envconfig.Process("", &e)
 	if err != nil {
 		glog.Fatal(err)
 	}
-
-	flag.Parse()
+	glog.Info(e)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
