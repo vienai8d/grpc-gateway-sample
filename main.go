@@ -32,9 +32,9 @@ func main() {
 	})
 
 	select {
-	case err := <-sigChan:
+	case sig := <-sigChan:
 		glog.Info("sigChan")
-		glog.Info(err)
+		glog.Info(sig)
 	case err := <-gErrChan:
 		glog.Info("gErrChan")
 		glog.Info(err)
